@@ -1,0 +1,7 @@
+# requirements.in
+fastapi
+uvicorn[standard]
+python-dotenv
+pip-tools
+ruff
+black
