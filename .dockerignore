@@ -15,3 +15,5 @@ alembic/
 *.db
 .dockerignore
 .env
+.env.local
+.env.docker
