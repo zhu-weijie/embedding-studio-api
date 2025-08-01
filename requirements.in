@@ -5,3 +5,6 @@ python-dotenv
 pip-tools
 ruff
 black
+sqlalchemy
+psycopg2-binary
+tenacity
