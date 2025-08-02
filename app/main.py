@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from sqlalchemy import text
 from tenacity import after_log, before_log, retry, stop_after_attempt, wait_fixed
 
+from app.api.v1.api import api_router
 from app.db.session import SessionLocal
 
 logging.basicConfig(level=logging.INFO)
@@ -46,6 +47,7 @@ app = FastAPI(
     version="0.1.0",
     lifespan=lifespan,
 )
+app.include_router(api_router, prefix="/api")
 
 
 @app.get("/")
