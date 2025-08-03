@@ -10,3 +10,4 @@ tenacity
 pydantic-settings
 alembic
 tiktoken
+boto3
