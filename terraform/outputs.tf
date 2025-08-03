@@ -27,3 +27,8 @@ output "ecs_service_security_group_id" {
   description = "The ID of the ECS service's security group."
   value       = aws_security_group.ecs_service.id
 }
+
+output "db_endpoint" {
+  description = "The connection endpoint for the RDS instance."
+  value       = aws_db_instance.main.endpoint
+}
