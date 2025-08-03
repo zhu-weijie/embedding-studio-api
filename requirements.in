@@ -11,3 +11,4 @@ pydantic-settings
 alembic
 tiktoken
 boto3
+pgvector

@@ -51,12 +51,16 @@ markupsafe==3.0.2
     # via mako
 mypy-extensions==1.1.0
     # via black
+numpy==2.3.2
+    # via pgvector
 packaging==25.0
     # via
     #   black
     #   build
 pathspec==0.12.1
     # via black
+pgvector==0.4.1
+    # via -r requirements.in
 pip-tools==7.5.0
     # via -r requirements.in
 platformdirs==4.3.8
