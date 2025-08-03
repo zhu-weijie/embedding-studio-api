@@ -74,9 +74,7 @@ resource "aws_subnet" "private_b" {
   }
 }
 
-/*
-# --- COMMENTED OUT TO SAVE COSTS ---
-# --- NAT Gateway and Private Routing ---
+# --- COMMENTED OUT TO SAVE COSTS START ---
 resource "aws_eip" "nat" {
   domain = "vpc"
   tags = {
@@ -113,4 +111,4 @@ resource "aws_route_table_association" "private_b" {
   subnet_id      = aws_subnet.private_b.id
   route_table_id = aws_route_table.private.id
 }
-*/
+# --- COMMENTED OUT TO SAVE COSTS END ---
