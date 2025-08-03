@@ -1,21 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
+from app.api.deps import get_db
 from app.crud import crud_embedding, crud_text
-from app.db.session import SessionLocal
 from app.schemas.embedding import Embedding, EmbeddingCreate
 from app.schemas.text import Text, TextCreate
 from app.services.bedrock import bedrock_service
 
 router = APIRouter()
-
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 
 @router.post("/texts", response_model=Text)

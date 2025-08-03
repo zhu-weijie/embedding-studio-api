@@ -3,21 +3,13 @@ from typing import List
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
+from app.api.deps import get_db
 from app.crud import crud_embedding
-from app.db.session import SessionLocal
 from app.schemas.text import Text
 from app.schemas.tokenizer import TokenizeRequest
 from app.services.bedrock import bedrock_service
 
 router = APIRouter()
-
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 
 @router.post("/search", response_model=List[Text])
