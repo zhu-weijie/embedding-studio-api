@@ -42,6 +42,25 @@ resource "aws_iam_role_policy_attachment" "bedrock_policy_attachment" {
   policy_arn = aws_iam_policy.bedrock_access.arn
 }
 
+resource "aws_iam_policy" "secrets_manager_access" {
+  name = "SecretsManagerReadDbPasswordPolicy"
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action   = "secretsmanager:GetSecretValue",
+        Effect   = "Allow",
+        Resource = "arn:aws:secretsmanager:us-east-1:215288576473:secret:embedding-studio/db-password-*"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "secrets_manager_policy_attachment" {
+  role       = aws_iam_role.ecs_task_execution_role.name
+  policy_arn = aws_iam_policy.secrets_manager_access.arn
+}
+
 resource "aws_ecs_task_definition" "api" {
   family                   = "embedding-studio-api"
   network_mode             = "awsvpc"
@@ -64,12 +83,26 @@ resource "aws_ecs_task_definition" "api" {
           hostPort      = 8000
         }
       ]
+      logConfiguration = {
+        logDriver = "awslogs",
+        options = {
+          "awslogs-group"         = aws_cloudwatch_log_group.api.name,
+          "awslogs-region"        = var.aws_region,
+          "awslogs-stream-prefix" = "ecs"
+        }
+      }
+      secrets = [
+        {
+          "name" : "POSTGRES_PASSWORD",
+          "valueFrom" : "arn:aws:secretsmanager:us-east-1:215288576473:secret:embedding-studio/db-password:password::"
+        }
+      ]
       environment = [
         { name = "POSTGRES_USER", value = "appuser" },
-        { name = "POSTGRES_PASSWORD", value = var.db_password },
         { name = "POSTGRES_DB", value = "appdb" },
         { name = "POSTGRES_SERVER", value = split(":", aws_db_instance.main.endpoint)[0] },
-        { name = "POSTGRES_PORT", value = "5432" }
+        { name = "POSTGRES_PORT", value = "5432" },
+        { name = "AWS_REGION", value = var.aws_region }
       ]
     }
   ])

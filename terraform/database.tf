@@ -1,3 +1,11 @@
+data "aws_secretsmanager_secret_version" "db_password" {
+  secret_id = "embedding-studio/db-password"
+}
+
+locals {
+  db_password = jsondecode(data.aws_secretsmanager_secret_version.db_password.secret_string)["password"]
+}
+
 resource "aws_db_subnet_group" "main" {
   name       = "embedding-studio-db-subnet-group"
   subnet_ids = [aws_subnet.private_a.id, aws_subnet.private_b.id]
@@ -39,7 +47,7 @@ resource "aws_db_instance" "main" {
   engine                 = "postgres"
   engine_version         = "16"
   username               = "appuser"
-  password               = var.db_password
+  password               = local.db_password
   db_subnet_group_name   = aws_db_subnet_group.main.name
   vpc_security_group_ids = [aws_security_group.db.id]
   publicly_accessible    = false
