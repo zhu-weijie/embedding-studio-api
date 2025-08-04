@@ -48,6 +48,7 @@ resource "aws_db_instance" "main" {
   engine_version         = "16"
   username               = "appuser"
   password               = local.db_password
+  db_name                = "appdb"
   db_subnet_group_name   = aws_db_subnet_group.main.name
   vpc_security_group_ids = [aws_security_group.db.id]
   publicly_accessible    = false
